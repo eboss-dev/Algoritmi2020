@@ -40,7 +40,7 @@ int main(){
     long long int gg = 0;
     bool prima = true;
     for(int i = 0; i < N; i++){
-        //caso speciale se non parte da 1
+        //primo caso e verifica se non parte da 1
         if(prima){
             if(lista[i].inizio > 1){
                 supp.inizio = 1;
@@ -50,21 +50,24 @@ int main(){
             e = lista[i].fine;
             prima = false;
         } else {
-            //sovrapposizione aggiorno
-            if(e >= lista[i].inizio && lista[i].fine > e){
+            //OVERLAP
+            if(lista[i].inizio <= e){
                 //ERRORE: AGGIORNO SOLO QUANDO LISTA[I].FINE > E
                 //altrimenti sono nel caso in cui la coppia è già compresa
-                e = lista[i].fine;
-            } else {
-                //aggiorno l'item da restituire solo se maggiore
+                //CASO 1: la fine della coppia è più grande dell'end -> sostituisco
+                if (lista[i].fine > e)
+                    e = lista[i].fine;
+                //CASO 2: la fine della coppia è più piccolo quindi è compreso
+                //-----> non serve aggiornamento
+            } else { //NO OVERLAP -> ho quindi spazi vuoti
+                //aggiorno l'item da restituire solo se strettamente maggiore
                 //in questo modo sono safe se la lunghezza è uguale
                 if(lista[i].inizio - e > gg){
                     supp.inizio = e;
                     supp.fine = lista[i].inizio;
                     gg = supp.fine - supp.inizio;
-                    e = lista[i].fine;
-                } else if (lista[i].inizio - e == gg)
-                    e = lista[i].fine;
+                }
+                e = lista[i].fine;
 
             }
         }
